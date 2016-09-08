@@ -17,8 +17,6 @@
          background: hsl(360, 90%, 94%);
          color: dimgrey;
          text-align: center;
-         border: 1px dashed lavenderblush;
-         margin: 8px;
       }
       header{
          border-radius: 10px;
@@ -81,6 +79,53 @@
       pre{
          padding-top: 8px;
       }
+      footer a{
+         color: white;
+      }
+      footer div{
+         position: fixed;
+         bottom: 0;
+         right: -100px;
+         width: 60px;
+         height: 60px;
+         background: pink;
+         border-radius: 50%;
+         border: 1px dashed white;
+         box-shadow: 0 0 0 5px pink;
+         text-align: center;
+         line-height: 60px;
+
+         animation-name: korokoro;
+         animation-duration: 10s;
+         animation-timing-function: ease-in-out;
+         animation-delay: 0.3s;
+         animation-direction: alternate;
+         animation-iteration-count: infinite;
+      }
+      @keyframes korokoro {
+         0%{
+            right -70px;
+         }
+         5%{
+            right: -70px;
+            opacity: 0;
+            transform: rotate(0deg);
+         }
+         40%{
+            opacity: .8;
+         }
+         60%{
+            opacity: .8;
+         }
+         95%{
+            right: 100%;
+            opacity: 0;
+            transform: rotate(-1000deg);
+         }
+         100%{
+            right: 100%;
+         }
+      }
 
    </style>
 </head>
@@ -91,8 +136,9 @@
    </header>
    <h4>*- memo -*</h4>
    <section class="memo">
+      <h4>関数</h4>
       <pre>
-         <span>関数 - ユーザー定義関数(サブルーチン)</span>
+         <span>- ユーザー定義関数(サブルーチン)</span>
             複数行の処理をひとまとめにして再利用できるようにしする
                function 関数名(){
                   処理１...
@@ -109,6 +155,7 @@
             ?>
 
       </pre>
+      <h4>引数 戻り値/帰り値</h4>
       <pre>
          <span>引数(ひきすう) と 戻り値</span>
             関数ではこちらから値を渡して、それを処理してもらうことができる
@@ -139,8 +186,9 @@
             ?>
 
       </pre>
+      <h4>グローバル変数 ローカル変数</h4>
       <pre>
-         <span>グローバル変数 と ローカル変数</span>
+         <span>functionの中で使う$変数の扱いに注意</span>
 
 <?php
             $global_number=5;
@@ -168,42 +216,42 @@
          <span>注意！</span>関数名(**)に入れる値は引数っていうんだからな
          <br>関数内で定義してる変数へは外部からの代入はできないからな！
       </p>
-
+      <h4>外部.phpファイルを呼び出す</h4>
       <pre>
          <span>require と include</span>
             別のファイルに記述した処理を読み込める
       </pre>
+      <h4>continue; / break;</h4>
       <pre>
-         <span>continue / break</span>
-            繰り返し処理を繰り返し処理を効率的に使うために用意されている命令
+         繰り返し処理を繰り返し処理を効率的に使うために用意されている命令
 
-            - <span>continue;</span>
-               残りの処理を飛ばして次のループに移行する
-               (ループからは抜け出さない)
+         - <span>continue;</span>
+            残りの処理を飛ばして次のループに移行する
+            (ループからは抜け出さない)
 
-                  foreach($array as $key => $value){
-                     if($value == null){
-                        continue;
-                     }
-                     echo "$key : $value";
+               foreach($array as $key => $value){
+                  if($value == null){
+                     continue;
                   }
-                  // value == null の場合その後の処理をスキップして次のループへ
-                  // valueに値がある部分だけ$key $valueが表示される
+                  echo "$key : $value";
+               }
+               // value == null の場合その後の処理をスキップして次のループへ
+               // valueに値がある部分だけ$key $valueが表示される
 
-            - <span>break;</span>
-               処理を終了させる
-                  foreach($array as $key => $value){
-                     if($value == "hello"){
-                        echo "$key";
-                        break;
-                     }
+         - <span>break;</span>
+            処理を終了させる
+               foreach($array as $key => $value){
+                  if($value == "hello"){
+                     echo "$key";
+                     break;
                   }
-                  // hello が出てきた時点で$keyを表示して終了
+               }
+               // hello が出てきた時点で$keyを表示して終了
       </pre>
 
    </section>
 
-   <h3>以下課題</h3>
+   <h4>以下課題</h4>
    <section>
       <h4>#01</h4>
       <h5>自分のプロフィール(名前、生年月日、自己紹介)を3行に分けて表示するユーザー定義関数を作り、関数を10回呼び出して下さい</h5>
@@ -494,6 +542,6 @@
 
       </p>
    </section>
-   <footer></footer>
+   <footer><div><a href="#">Topへ</a></div></footer>
 </body>
 </html>

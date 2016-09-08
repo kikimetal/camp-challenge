@@ -27,6 +27,9 @@
          border: 1px dashed white;
          box-shadow: 0 0 0 5px pink;
       }
+      header p {
+         border: none;
+      }
       section{
          border-radius: 5px;
          margin: 5px 150px;
@@ -43,9 +46,10 @@
 </head>
 <body>
    <header>
-      <p>phpプログラミング基礎学習_01 課題</p>
+      <p>phpプログラミング基礎学習_01</p>
       <p>20160905 - 20160906</p>
    </header>
+   <h4>以下課題</h4>
    <section><!--------------------------------------------->
       <h4>#01</h4>
       <p class="test">

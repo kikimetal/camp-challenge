@@ -26,6 +26,9 @@
          border: 1px dashed white;
          box-shadow: 0 0 0 5px pink;
       }
+      header p {
+         border: none;
+      }
       section{
          border-radius: 5px;
          margin: 5px 150px;
@@ -154,7 +157,7 @@
          </p>
 
    </section><!--------------------------------------------->
-   <h3>以下課題</h3>
+   <h4>以下課題</h4>
    <section><!--------------------------------------------->
       <h4>#01</h4>
       <p class="test">
