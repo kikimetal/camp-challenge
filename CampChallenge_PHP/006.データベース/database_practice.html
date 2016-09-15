@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ja">
+<head>
+   <meta charset="utf8">
+   <title>database_practice</title>
+   <link rel="stylesheet" href="../00/style.css">
+</head>
+<body>
+<article>
+<header>
+<h3>データベース基礎</h3>
+</header>
+<h4><a href="#kadai">課題へ</a></h4>
+
+<section>
+<h4>#00 memo</h4>
+<h4>データ型について</h4>
+<pre>
+   数値
+   - int : 整数値
+   - double : 小数点
+
+   文字列
+   - char : あらかじめ文字列の長さが決まっている
+   - varchar : 可変長
+   - text : さらにどれだけ長くなるかわからない時はこれ
+
+   日付
+   - date : 日付
+   - datetime : 日付＋時間
+
+   その他
+   - enum
+      e.g.)
+         CREATE TABLE test_table(
+            name varchar(255),
+            memo text,
+            score double,
+            sex enum('male','female'),
+         );
+
+</pre>
+<h4>基本的なSQL</h4>
+<pre>
+   * テーブルを作る CREATE
+      CREATE TABLE fc_member (
+         id int,
+         name varchar(255),
+         sex enum('male', 'female')
+         job char(3)
+      );
+
+   * テーブルを削除 DROP
+      DROP TABLE fc_member;
+
+
+   * データを入れる INSERT INTO
+      - １レコード突っ込む（抜けがあっちゃダメ）
+         INSERT INTO fc_member VALUES ('kiki', 17, 'female');
+
+      - 指定したカラムのみ指定してデータを入れる（未指定のカラムには NULL が入る）
+         INSERT INTO fc_member (id, name) VALUES (17, 'lala');
+
+      - 特定１つのカラムに何個も値を入れていく（その数の分レコードが増える）
+         INSERT INTO fc_member (name) VALUES ('kiki'),('lala'),('ukon');
+
+
+   * データを見る SELECT
+      - 全部見る
+         SELECT * FROM fc_member;
+
+         SELECT * FROM fc_member \G
+            // データ量が多く横に長くなって見にくいい場合に使う、 この場合；は要らない
+
+      - name と sex をすべて表示
+         SELECT name, sex FROM fc_member;
+
+      - name が kiki の sex を表示
+         SELECT sex FROM fc_member WHERE name = 'kiki';
+
+      - job が war のレコードのすべてのカラムを表示
+         SELECT * FROM fc_member WHERE job = 'war';
+
+      - age の値が 20 以上のレコードを表示
+         SELECT * FROM fc_member WHERE <span>age >= 20</span> ;
+            // この辺の条件は割といつも通りかける
+
+
+   * データの更新 UPDATE
+      - 指定したカラムをすべて置き換える
+         UPDATE fc_member SET sex = 'female';
+            //全員 female になっちゃう
+
+      - 特定の条件を満たすレコードの 指定したカラムを置き換える
+         UPDATE fc_member SET sex='male' WHERE name = 'ukon';
+            //ukon だけ male になる
+
+
+   * テーブルのレコードの削除 DELETE
+      - テーブルの全レコードを削除
+         DELETE FROM fc_member;
+
+      - テーブルから name が kiki のレコードを削除
+         DELETE FROM fc_member WHERE name = 'kiki';
+            //WHERE でレコードを特定しないと、全レコードが消えてしまう
+
+</pre>
+<h4>も少し高度な設定</h4>
+<pre>
+   CREATE TABLE fc_member (
+
+      * 入力を必須にする
+         id int <span>not null</span>,
+            // id の入力を必須に = NULL を許可しない
+
+      * 未入力の時のデフォ値を設定
+         sex enum('male','female') <span>default 'male'</span>,
+            // 何も入力がなかったら male
+
+      * 自動連番 数値にしか使えない
+         id int not null <span>auto_increment</span>,
+
+      * 索引（インデックス）
+         - 主キー : レコードをこれのみで特定する、テーブルの中で一つのカラムにしかつけられない
+            id not null auto_increment <span>primary key</span>,
+
+         - キー   : 何個でもつけられるが、よく検索するものだけにつけよう
+            key name (name),
+
+         - ユニークキー : email とか、テーブルの中で重複した値が入ってきた時に、
+                          それをエラーで弾いてほしい
+            name varchar(255) <span>unique</span>,
+
+   );
+</pre>
+<h4>desc</h4>
+<pre>
+   * テーブルの詳細を見る
+      desc fc_member;
+
+</pre>
+<h4>条件付きで抽出 SELECT</h4>
+<pre>
+   * 任意の文字列 (何文字でもいい) <span>%</span>
+      SELECT * FROM fc_member WHERE email <span>like</span> '<span>%</span>@gmail.com';
+         // @gmail.com で終わる email を持ってるのを表示
+
+   * 任意の１文字(アンダーバー) <span>_</span>
+      SELECT * FROM fc_member WHERE name <span>like</span> '<span>____metal</span>';
+         // この場合、任意の４文字＋metal がOK
+         // e.g.) nanakikimetal, lalametal -->OK
+
+   * _から_までの間の奴 BETWEEN
+      SELECT * FROM fc_member WHERE age <span>BETWEEN 24 and 30</span>;
+         // age の値が 24 〜 30 のを表示
+
+   * 値の複数指定
+      SELECT * FROM fc_member WHERE job <span>IN ('war', 'whm')</span>;
+         // job の値が war か whm のどっちかであれば表示される
+
+   * and or で条件を増やす
+      SELECT * FROM fc_member WHERE sex = 'female' <span>AND</span> job = 'whm';
+         // 女性でかつ白魔道士だけが表示
+
+      SELECT * FROM fc_member WHERE role = 'meleeDPS' <span>OR</span> total_dps >= '1400';
+         // ロールが meleeDPS か、total_dps が 1400 以上のやつを表示
+
+</pre>
+</section>
+<h3 id="kadai">以下課題</h3>
+<section>
+<h4>#01 challenge_db の中に table profiles を作る</h4>
+<pre>
+   CREATE TABLE profiles(
+      profilesID int primary key auto_increment unique not null,
+      name varchar(255),
+      tell varchar(255),
+      age int,
+      birthday date
+   );
+
+   INSERT INTO profiles (name, tell, age, birthday) VALUES
+      ('tanaka minoru', '012-345-6789', 30, '1994-02-01'),
+      ('suzuki sigeru', '090-1122-3344', 37, '1987-08-12'),
+      ('suzuki minoru', '080-5566-7788', 24, '2000-12-24'),
+      ('satou kiyoshi', '012-0987-6543', 19, '2005-08-01'),
+      ('takahashi kiyoshi', '090-9900-1234', 24, '2000-12-24');
+
+</pre>
+
+<h4>#02 profilesIDが3のレコードのみを検索して表示</h4>
+<pre>
+   SELECT * FROM profiles WHERE profilesID = '3';
+
+</pre>
+<h4>#03 nameが「高橋 清」のレコードのみを検索して表示</h4>
+<pre>
+   SELECT * FROM profiles WHERE name = 'takahashi kiyoshi';
+
+</pre>
+<h4>#04 ageが「24」のレコードのみを検索して表示</h4>
+<pre>
+   SELECT * FROM profiles WHERE age = 24;
+
+</pre>
+<h4>#05 ageが「25以上」のレコードのみを検索して表示(WHERE句の記述を変える)</h4>
+<pre>
+   SELECT * FROM profiles WHERE age >= 25;
+
+</pre>
+<h4>#06 nameに「実」が含まれているレコードを表示(部分一致の修飾語句を追記する)</h4>
+<pre>
+   SELECT * FROM profiles WHERE name like '%minoru%';
+
+</pre>
+<h4>#07 profilesIDが2のnameを「吉田 茂」に更新する。この1件をSELECTして表示する</h4>
+<pre>
+   UPDATE profiles SET name = 'yoshida shigeru' WHERE profilesID = 2;
+   SELECT * FROM profiles WHERE name = 'yoshida shigeru';
+
+</pre>
+<h4>#08 birthdayが2000-12-24のレコードを削除する。SELECT*で表示する</h4>
+<pre>
+   DELETE FROM profiles WHERE birthday = '2000-12-24';
+   SELECT * FROM profiles;
+
+</pre>
+</section>
+<section>
+<h4>#09</h4>
+<pre>
+   CREATE TABLE station (
+      stationID int unique not null auto_increment,
+      stationName varchar(255)
+   );
+
+   CREATE TABLE department (
+      departmentID int unique not null auto_increment,
+      departmentName varchar(255)
+   );
+
+   INSERT INTO department (departmentName)
+      VALUES ('開発部'),('営業部'),('総務部');
+
+   INSERT INTO station (stationName)
+      VALUES ('九段下'),('永田町'),('渋谷'),('神保町'),('上井草');
+
+
+   CREATE TABLE user (
+      userID int not null auto_increment unique primary key,
+      name varchar(255),
+      tell varchar(255),
+      age int,
+      birthday date,
+      departmentID int,
+      stationID int,
+      foreign key (departmentID) references department (departmentID),
+      foreign key (stationID) references station (stationID)
+   );
+
+
+   INSERT INTO user (name, tell, age, birthday, departmentID, stationID) VALUES
+      ('田中 実', '012-345-6789', 30, '1994-02-01', 3, 1),
+      ('鈴木 茂', '090-1122-3344', 37, '1987-08-12', 3, 4),
+      ('鈴木 実', '080-5566-7788', 24, '2000-12-24', 2, 5),
+      ('佐藤 清', '012-0987-6543', 19, '2005-08-01', 1, 5),
+      ('高橋 清', '090-9900-1234', 24, '2000-12-24', 3, 5);
+
+
+</pre>
+</section>
+
+</article>
+
+<footer></footer>
+
+</body>
+</html>
