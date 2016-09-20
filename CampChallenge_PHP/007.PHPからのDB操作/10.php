@@ -32,7 +32,7 @@
 <h4>課題 #10</h4>
 <p class="pre">
     profilesIDで指定したレコードを削除できるフォームを作成してください
-    
+
 </p>
 <hr>
 <section>
@@ -73,8 +73,7 @@
             exit;
         }
 
-        // 以下、_post[id] が入力済みのとき
-        // 今回は入力された profilesID のレコードが存在するかしないかの確認、分岐は割愛
+        // 以下、_post[id] が入力済みのとき、レコードの有無を確認する
         // DBアクセス開始
         const DB_DATABASE_NAME = "challenge_db";
         const DB_USERNAME = "kiki";
@@ -118,7 +117,7 @@
             // disconnect
             $pdo = null;
 
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             die("接続中にエラーが発生しました(DELETE) : " . $e->getMessage());
         }
 
@@ -128,41 +127,10 @@
 
 
 
-
-
-
-
-/*
------
-        try {
-            $pdo = new PDO(PDO_DSN, DB_USERNAME, DB_PASSWORD);
-            $pdo->setAttribute (PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (Exception $e) {
-            die ("接続中にエラーが発生しました : " . $e->getMessage());
-        }
-
-----
-
-        try{
-            $pdo = new PDO ( PDO_DSN , DB_USERNAME , DB_PASSWORD );
-            $pdo->setAttribute( PDO::ATTR_ERRMODE , PDO::ERRMODE_EXCEPTION );
-        }catch( Exception $e ){
-            die( "接続中にエラーが発生しました : " . $e->getMessage() );
-        }
----
-*/
-
-
-
-
-
-
-
         ?>
+
+        
     </div>
-
 </section>
-
-
 </body>
 </html>
