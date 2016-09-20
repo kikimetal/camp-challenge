@@ -204,7 +204,7 @@
             // disconnect
             $pdo = null;
         }catch( PDOException $e ){
-            die( "接続できませんでした : " );
+            die( "接続できませんでした : " . $e->getMessage() );
         }
 
 
