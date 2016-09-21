@@ -82,20 +82,23 @@
    </section><!--------------------------------------------->
    <section><!--------------------------------------------->
       <h4>#04 ,#05</h4>
+      <p>
+          定数と変数を宣言し、それぞれに数値を入れて四則演算を行ってください。
+      </p>
       <p class="test">
 
          <?php
-         $x=10;
-         $y=20;
-         echo "x=$x, y=$y<br>";
-         $tasu=$x+$y;
-         echo "x+y=$tasu<br>";
-         $hiku=$x-$y;
-         echo "x-y=$hiku<br>";
-         $kakeru=$x*$y;
-         echo "x*y=$kakeru<br>";
-         $waru=$x/$y;
-         echo "$x/$y=$waru<br>";
+         const XX = 10;
+         $y = 20;
+         echo "x = XX , y = $y <br>";
+         $tasu = XX + $y;
+         echo "x + y = $tasu <br>";
+         $hiku = XX - $y;
+         echo "x - y = $hiku <br>";
+         $kakeru = XX * $y;
+         echo "x * y = $kakeru <br>";
+         $waru = XX / $y;
+         echo "XX / $y = $waru <br>";
          ?>
 
       </p>
