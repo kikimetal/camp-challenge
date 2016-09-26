@@ -60,7 +60,7 @@ session_start();
                     // セッションクッキーを消す
                     session_unset();
                     session_destroy();
-                    setcookie("PHPSESSID" , "" , time() - 1800);
+                    // setcookie("PHPSESSID" , "" , time() - 1800);
                 }
                 elseif (empty($_POST["name"]) or empty($_POST["password"])) {
                     // どっちかが未入力
@@ -69,7 +69,7 @@ session_start();
                     // セッションクッキーを消す
                     session_unset();
                     session_destroy();
-                    setcookie("PHPSESSID" , "" , time() - 1800);
+                    // setcookie("PHPSESSID" , "" , time() - 1800);
                 }
                 else {
                     // 入力されていたらログインを試みる
