@@ -26,14 +26,19 @@ $condition = session_cookie_chk(); // true or false
     <section class="center">
 
         <?php
-        if (!$condition and empty($_SESSION["login"])) {
+        if (!$condition or empty($_SESSION["php_008_05_kadai_login"])) {
+
             echo "<p>不正なアクセスです。</p><p><a href='main.php'><button>メインページはこちら</button></a></p>";
             exit;
+
         } else {
+
             session_set_cookie_params(60 * 60 * 24);
             session_start();
             session_regenerate_id();
+            
         }
+
         ?>
         <p>
             こんにちは <?php echo $_SESSION["user_name"]; ?> さん
@@ -48,7 +53,7 @@ $condition = session_cookie_chk(); // true or false
 
 
         <?php
-        
+
         if (!empty($_POST["product_name"]) and !empty($_POST["submitbtn"])) {
             $user = new User;
             $user->insert_product();

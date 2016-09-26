@@ -57,10 +57,19 @@ if (!empty($_POST["logout"]) and $_POST["logout"] == true) {
             <?php
                 if (empty($_POST["submitbtn"])) {
                     // 初回
+                    // セッションクッキーを消す
+                    session_unset();
+                    session_destroy();
+                    setcookie("PHPSESSID" , "" , time() - 1800);
                 }
                 elseif (empty($_POST["name"]) or empty($_POST["password"])) {
                     // どっちかが未入力
                     echo "<p><strong>未入力欄があります！</strong></p>";
+
+                    // セッションクッキーを消す
+                    session_unset();
+                    session_destroy();
+                    setcookie("PHPSESSID" , "" , time() - 1800);
                 }
                 else {
                     // 入力されていたらログインを試みる
@@ -69,7 +78,7 @@ if (!empty($_POST["logout"]) and $_POST["logout"] == true) {
                     // ユーザー名
                     $_SESSION["user_name"] = $_POST["name"];
                     // このページからログインしたときのみ true になる
-                    $_SESSION["login"] = true;
+                    $_SESSION["php_008_05_kadai_login"] = true;
 
                 }
             ?>

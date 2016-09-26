@@ -48,11 +48,16 @@ class User {
         try {
             $pdo = pdo_connect();
             $sql = "SELECT id FROM obj_user WHERE name = :name";
+
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue( ":name" , $this->name );
             $stmt->execute();
             $result = $stmt->fetchall(PDO::FETCH_ASSOC);
-            return $result[0]["id"];
+
+            if (!empty($result)) {
+                $this->id = $result[0]["id"];
+            }
+            return $this->id;
 
             $pdo = null;
         } catch (PDOException $e) {
@@ -116,6 +121,7 @@ class User {
 
     // user name 直接セッションに入れちゃえば不必要か...
     public $name;
+    private $id;
 
     public function set_name($str) {
         $this->name = $str;
@@ -129,7 +135,7 @@ class User {
 
 
 }
-// ----------User
+// ----------class User-----------
 
 
 
@@ -142,6 +148,8 @@ function pdo_connect() {
 
 
 // セッションクッキーの存在を返す、あったら true
+// セッションクッキーを時限で破棄する設定にしてるため、これがあるかないかで、
+// ログインされてるかされてないかを判別
 function session_cookie_chk() {
     if (isset($_COOKIE["PHPSESSID"])) {
         $bool = true;

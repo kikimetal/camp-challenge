@@ -26,18 +26,25 @@ $condition = session_cookie_chk(); // true or false
     <section class="center">
 
         <?php
-        if (!$condition and empty($_SESSION["login"])) {
+
+        if (!$condition or empty($_SESSION["php_008_05_kadai_login"])) {
+
             echo "<p>不正なアクセスです。</p><p><a href='main.php'><button>メインページはこちら</button></a></p>";
             exit;
+
         } else {
+
             session_set_cookie_params(60 * 60 * 24);
             session_start();
             session_regenerate_id();
+            
         }
 
 
         $user = new User;
-        $user->set_name($_SESSION["user_name"]);
+        if (isset($_SESSION["user_name"])) {
+            $user->set_name($_SESSION["user_name"]);
+        }
         ?>
 
         <p>
