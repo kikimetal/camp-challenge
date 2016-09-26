@@ -6,10 +6,10 @@ if (!empty($_POST["logout"]) and $_POST["logout"] == true) {
     $user = new User;
     $user->logout();
     // var_dump($_POST["logout"]);
-} else {
-    session_set_cookie_params(60 * 60);
-    session_start();
 }
+
+session_set_cookie_params(60 * 60);
+session_start();
 
 ?>
 

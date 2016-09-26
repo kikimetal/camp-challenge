@@ -35,11 +35,12 @@ class User {
 
     // ログアウト
     public function logout() {
-        session_set_cookie_params(1);
-        session_start();
-        session_regenerate_id();
+        // session_set_cookie_params(1);
+        // session_start();
+        // session_regenerate_id();
         session_unset();
         session_destroy();
+        setcookie("PHPSESSID", "", time() - 1800);
     }
 
 

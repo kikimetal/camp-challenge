@@ -4,6 +4,9 @@ require_once "util.php";
 
 $condition = session_cookie_chk(); // true or false
 
+session_set_cookie_params(60 * 60 * 24);
+session_start();
+
 ?>
 
 <!doctype html>
@@ -30,14 +33,15 @@ $condition = session_cookie_chk(); // true or false
         if (!$condition or empty($_SESSION["php_008_05_kadai_login"])) {
 
             echo "<p>不正なアクセスです。</p><p><a href='main.php'><button>メインページはこちら</button></a></p>";
+
+            $user = new User;
+            $user->logout();
             exit;
 
         } else {
 
-            session_set_cookie_params(60 * 60 * 24);
-            session_start();
             session_regenerate_id();
-            
+
         }
 
 
