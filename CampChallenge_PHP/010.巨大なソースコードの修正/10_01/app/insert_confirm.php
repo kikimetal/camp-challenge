@@ -1,6 +1,5 @@
 <?php require_once '../common/defineUtil.php'; ?>
 <?php require_once '../common/scriptUtil.php'; ?>
-
 <?php session_start(); ?>
 
 <!DOCTYPE html>
@@ -14,47 +13,31 @@
   <body>
     <?php
 
-    // if(!empty($_POST['name']) && !empty($_POST['year']) && !empty($_POST['type'])
-    //         && !empty($_POST['tell']) && !empty($_POST['comment'])
-    //                 // #02
-    //                 && $_POST['month'] && $_POST['day']
-    //                         && $_POST['year'] != "----" && $_POST['month'] != "--" && $_POST['day'] != "--"){
-
-
-
-    // ダイレクトリンクの際を追加
-    if (empty($_POST)) {
+    if (empty($_POST['permission'])) {
         echo "<h3>不正なアクセスです！</h3><p>このページへ直接アクセスすることはできません。</p>";
         echo return_top();
         exit;
     }
 
 
-    // #03
-    $unanswered_flg = (bool) false; // 未回答の時に立つフラグ
-
-    if (empty($_POST["name"])) {
-        echo "<p><b>※名前が未入力です。</b></p>";
-        $unanswered_flg = true;
-    }
-    if (empty($_POST['year']) or empty($_POST['month']) or empty($_POST['day']) or $_POST["year"] == "----" or $_POST["month"] == "--" or $_POST["day"] == "--") {
-        echo "<p><b>※生年月日の選択が不完全です。</b></p>";
-        $unanswered_flg = true;
-    }
-    if (empty($_POST["type"])) {
-        echo "<p><b>※種別が未選択です。</b></p>";
-        $unanswered_flg = true;
-    }
-    if (empty($_POST["tell"])) {
-        echo "<p><b>※電話番号が未入力です。</b></p>";
-        $unanswered_flg = true;
-    }
-    if (empty($_POST["comment"])) {
-        echo "<p><b>※自己紹介文が未入力です。</b></p>";
-        $unanswered_flg = true;
+    $unanswered_flg = (bool) false; // どれかが未回答の時に立つフラグ
+    $birthday_flg = (bool) false; // 生年月日の未入力警告の重複を避けるフラグ
+    foreach (FORM_ARR as $key => $value) {
+        if (!chk_post($key)) {
+            if ($key == "year" or $key == "month" or $key =="day") {
+                if (!$birthday_flg) {
+                    echo "<p><b>" . $value . "の選択が不完全です。</b></p>";
+                    $birthday_flg = true;
+                    $unanswered_flg = true;
+                }
+                continue;
+            }
+            echo "<p><b>" . $value . "の入力が未回答です。</b></p>";
+            $unanswered_flg = true;
+        }
     }
 
-
+    // 未入力でひっかかればここ
     if ($unanswered_flg) {
     ?>
 
@@ -64,43 +47,37 @@
         <br>
 
         <form action="<?php echo INSERT ?>" method="POST">
-            <!-- #04 -->
-            <input type="hidden" name="name" value="<?php if (!empty($_POST['name'])) { echo $_POST['name']; } ?>">
-            <input type="hidden" name="year" value="<?php if (!empty($_POST['year'])) { echo $_POST['year']; } ?>">
-            <input type="hidden" name="month" value="<?php if (!empty($_POST['month'])) { echo $_POST['month']; } ?>">
-            <input type="hidden" name="day" value="<?php if (!empty($_POST['day'])) { echo $_POST['day']; } ?>">
-            <input type="hidden" name="type" value="<?php if (!empty($_POST['type'])) { echo $_POST['type']; } ?>">
-            <input type="hidden" name="tell" value="<?php if (!empty($_POST['tell'])) { echo $_POST['tell']; } ?>">
-            <input type="hidden" name="comment" value="<?php if (!empty($_POST['comment'])) { echo $_POST['comment']; } ?>">
+
+            <?php
+            foreach (FORM_ARR as $key => $value) {
+            ?>
+                <input type="hidden" name="<?php echo $key;?>" value="<?php echo_post($key); ?>">
+            <?php
+            }
+            ?>
 
             <input type="submit" name="no" value="登録画面に戻る">
         </form>
 
     <?php
+    // すべて入力済みでここ
     } else {
 
-        $post_name = $_POST['name'];
-        //date型にするために1桁の月日を2桁にフォーマットしてから格納
-        $post_birthday = $_POST['year'].'-'.sprintf('%02d',$_POST['month']).'-'.sprintf('%02d',$_POST['day']);
-        $post_type = $_POST['type'];
-        $post_tell = $_POST['tell'];
-        $post_comment = $_POST['comment'];
-
         //セッション情報に格納
-        // session_start();
-        $_SESSION['name'] = $post_name;
-        $_SESSION['birthday'] = $post_birthday;
-        $_SESSION['type'] = $post_type;
-        $_SESSION['tell'] = $post_tell;
-        $_SESSION['comment'] = $post_comment;
+        $_SESSION['name'] = $_POST['name'];
+            //date型にするために1桁の月日を2桁にフォーマットしてから格納
+        $_SESSION['birthday'] = $_POST['year'].'-'.sprintf('%02d',$_POST['month']).'-'.sprintf('%02d',$_POST['day']);
+        $_SESSION['type'] = $_POST['type'];
+        $_SESSION['tell'] = $_POST['tell'];
+        $_SESSION['comment'] = $_POST['comment'];
     ?>
 
         <h1 class="center">登録確認画面</h1>
-        名前:<?php echo $post_name;?><br>
-        生年月日:<?php echo $post_birthday;?><br>
-        種別:<?php echo $post_type?><br>
-        電話番号:<?php echo $post_tell;?><br>
-        自己紹介:<?php echo $post_comment;?><br>
+        名前:<?php echo $_SESSION["name"]; ?><br>
+        生年月日:<?php echo $_SESSION["birthday"]; ?><br>
+        種別:<?php echo $_SESSION["type"]; ?><br>
+        電話番号:<?php echo $_SESSION["tell"]; ?><br>
+        自己紹介:<?php echo $_SESSION["comment"]; ?><br>
 
         上記の内容で登録します。よろしいですか？
 
@@ -111,13 +88,13 @@
 
         <form action="<?php echo INSERT ?>" method="POST">
 
-            <input type="hidden" name="name" value="<?php if (!empty($_POST['name'])) { echo $_POST['name']; } ?>">
-            <input type="hidden" name="year" value="<?php if (!empty($_POST['year'])) { echo $_POST['year']; } ?>">
-            <input type="hidden" name="month" value="<?php if (!empty($_POST['month'])) { echo $_POST['month']; } ?>">
-            <input type="hidden" name="day" value="<?php if (!empty($_POST['day'])) { echo $_POST['day']; } ?>">
-            <input type="hidden" name="type" value="<?php if (!empty($_POST['type'])) { echo $_POST['type']; } ?>">
-            <input type="hidden" name="tell" value="<?php if (!empty($_POST['tell'])) { echo $_POST['tell']; } ?>">
-            <input type="hidden" name="comment" value="<?php if (!empty($_POST['comment'])) { echo $_POST['comment']; } ?>">
+            <?php
+            foreach (FORM_ARR as $key => $value) {
+            ?>
+                <input type="hidden" name="<?php echo $key;?>" value="<?php echo_post($key); ?>">
+            <?php
+            }
+            ?>
 
             <input type="submit" name="no" value="登録画面に戻る">
         </form>
@@ -126,15 +103,7 @@
     }
     ?>
 
-
-    <footer>
-        <?php
-        // #01
-        echo return_top();
-        ?>
-    </footer>
-
-
+    <footer><?php echo return_top(); ?></footer>
 
 </body>
 </html>

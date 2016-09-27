@@ -15,5 +15,7 @@
     <a href="<?php echo INSERT; ?>">新規登録</a><br>
     <a href="<?php echo SEARCH; ?>" >検索(修正・削除)</a><br>
 
+    <?php print_r(FORM_ARR); ?>
+
 </body>
 </html>

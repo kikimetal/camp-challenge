@@ -13,9 +13,12 @@ function echo_post($key) {
     }
 }
 
-// あるかないか bool を返す
+// あったら値を なかったら false を返す
 function chk_post($key) {
     if (!empty($_POST[$key])) {
-        return $_POST[$key];
+        $return = $_POST[$key];
+    } else {
+        $return = false;
     }
+    return $return;
 }

@@ -1,6 +1,7 @@
 <?php
 require_once 'scriptUtil.php';
 
+// DB周りはここ
 class Database {
 
     private function connect() {
@@ -26,7 +27,7 @@ class Database {
         $pdo = $this->connect();
 
         //DBに全項目のある1レコードを登録するSQL
-        $insert_sql = "ooooINSERT INTO user_t(name,birthday,tell,type,comment,newDate)"
+        $insert_sql = "INSERT INTO user_t(name,birthday,tell,type,comment,newDate)"
                 . "VALUES(:name,:birthday,:tell,:type,:comment,:newDate)";
 
         try {
@@ -43,7 +44,6 @@ class Database {
             $insert_query->bindValue(':tell',$_SESSION['tell']);
             $insert_query->bindValue(':type',$_SESSION['type']);
             $insert_query->bindValue(':comment',$_SESSION['comment']);
-
             $insert_query->bindValue(':newDate',$_SESSION['datetime']);
 
             //SQLを実行
