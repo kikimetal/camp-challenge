@@ -1,0 +1,21 @@
+html {
+    background: hsla(355, 95%, 92%, 1);
+    padding: 20px;
+}
+body {
+    box-sizing: border-box;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    background: lavenderblush;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 0 hsla(359, 40%, 70%, 0.3);
+    color: dimgrey;
+}
+.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
