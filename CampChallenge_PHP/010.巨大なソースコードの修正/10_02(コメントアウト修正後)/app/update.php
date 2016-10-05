@@ -71,7 +71,7 @@ require_once '../common/dbaccessUtil.php';
         if($complete){
             // **************************************** $complete == true ***********************************************
             // すべて入力されていた時
-            $_SESSION["update_tell_flg"] = true;
+            $_SESSION["user_data"]["update_tell_flg"] = true;
             ?>
             <h4>この内容で本当に変更してよろしいですか？</h4>
             <p><b>*この操作は取り消せません。</b></p>
@@ -112,7 +112,7 @@ require_once '../common/dbaccessUtil.php';
             <br>
             <h4>- 不完全な項目</h4>
         <?php
-            $_SESSION["update_tell_flg"] = true;
+            $_SESSION["user_data"]["update_tell_flg"] = true;
             //連想配列内の未入力項目を検出して表示
             foreach ($unanswerd_flg as $key => $value){
                 if($key == "userID" or $key == "birthday" or $key == "submitbtn" or $key == "mode"){
@@ -145,7 +145,7 @@ require_once '../common/dbaccessUtil.php';
                 // 電話番号が不完全の時の処理を追加
                 if($key == 'tell' and $value != true and empty($tell_flg)){
                     echo "<p><span class='crimson'>＊電話番号の入力形式が間違っています。</span></p>";
-                    $_SESSION["update_tell_flg"] = false;
+                    $_SESSION["user_data"]["update_tell_flg"] = false;
                 }
             } // foreach
             ?>
@@ -162,8 +162,10 @@ require_once '../common/dbaccessUtil.php';
     }else{
         // *********************** 初回アクセス    or   $comlete == false で帰ってきた時 ****************************
         $user_data = $_SESSION["user_data"];
-        // このままだと、受け取った生年月日 ([birthday]) が year month day に対応していないため、分解
-        if(!isset($user_data["year"]) and !isset($user_data["year"]) and !isset($user_data["year"])){
+        // 初回アクセス時、このままだと、受け取った生年月日 ([birthday]) が year month day に対応していないため、分解
+        // 初回アクセス時、空があることはない。ここでfalseを出す場合、UPDATE画面で意図的に -- を選択してきていることになる。
+        // その場合はPOSTで空のstringまたは純粋に入力値がyear month dayに格納されているので、birthdayから分解する必要はない。
+        if(empty($user_data["year"]) and empty($user_data["month"]) and empty($user_data["day"])){
             $user_data["year"] = date('Y', strtotime($user_data['birthday']));
             $user_data["month"] = date('n',strtotime($user_data["birthday"]));
             $user_data["day"] = date('d',strtotime($user_data["birthday"]));
@@ -213,7 +215,7 @@ require_once '../common/dbaccessUtil.php';
         <?php } ?>
         <br>
 
-        <?php echo update_input_chk("電話番号:<br>*半角数字とハイフン(-)で記入してください。例) 080-1122-3344<br>","tell","tell_flg"); ?>
+        <?php echo update_input_chk("電話番号:<br>*半角数字とハイフン(-)で記入してください。例) 080-1122-3344<br>","tell","update_tell_flg"); ?>
         <input type="text" name="update_tell" value="<?php echo $user_data['tell']; ?>">
         <br><br>
 
